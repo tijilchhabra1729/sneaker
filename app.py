@@ -18,6 +18,22 @@ def index():
     return render_template("index.htm")
 
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+
+        user = User(name=form.name.data,
+                    username=form.username.data,
+                    email=form.email.data,
+                    password=form.password.data)
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('login'))
+    return render_template('register.htm', form=form)
+
+
 @app.route('/mens', methods=['GET', 'POST'])
 def mens():
     return render_template('mens.htm')

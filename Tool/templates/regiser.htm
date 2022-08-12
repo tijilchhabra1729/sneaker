@@ -1,0 +1,101 @@
+{%extends 'base.htm'%} {%block content%}
+
+
+<div class="sign-up">
+  <div class="row justify-content-center ">
+    <br>
+
+    <form method="POST" enctype="multipart/form-data" class="form">
+      <h1 class="heading-2">Register</h1>
+      <br>
+      {{form.hidden_tag()}}
+      <div class="mgb-small">
+        <div>
+          <div class="input-wrapper  mgb-e-small">
+              <div>
+                {{form.name(class="form__input", placeholder='Name')}}
+              <div class="form__line"></div>
+            </div>
+        </div>
+      </div>
+      </div>
+
+      <div class="mgb-small">
+        <div>
+          <div class="input-wrapper  mgb-e-small">
+              <div>
+                {{form.email(class="form__input", placeholder='Email')}}
+              <div class="form__line"></div>
+            </div>
+        </div>
+  
+        {%if form.email.errors%}
+        {%for error in form.email.errors%}
+  
+        <small class="error">{{error}}</small>
+        {%endfor%} {%endif%}
+      </div>
+      </div>
+
+      <div class="mgb-small">
+        <div>
+          <div class="input-wrapper  mgb-e-small">
+              <div>
+                {{form.username(class="form__input", placeholder='Username')}}
+              <div class="form__line"></div>
+            </div>
+        </div>
+  
+        {%if form.username.errors%}
+        {%for error in form.username.errors%}
+  
+        <small class="error">{{error}}</small>
+        {%endfor%} {%endif%}
+      </div>
+      </div>
+
+      <div class="mgb-small">
+        <div>
+          <div class="input-wrapper  mgb-e-small">
+              <div>
+                {{form.password(class="form__input", placeholder='Password')}}
+              <div class="form__line"></div>
+            </div>
+        </div>
+  
+        {%if form.password.errors%}
+        {%for error in form.password.errors%}
+  
+        <small class="error">{{error}}</small>
+        {%endfor%} {%endif%}
+      </div>
+      </div>
+
+      <div class="mgb-small">
+        <div>
+          <div class="input-wrapper  mgb-e-small">
+              <div>
+                {{form.pass_confirm(class="form__input", placeholder='Confirm Password')}}
+              <div class="form__line"></div>
+            </div>
+        </div>
+  
+        {%if form.pass_confirm.errors%}
+        {%for error in form.pass_confirm.errors%}
+  
+        <small class="error">{{error}}</small>
+        {%endfor%} {%endif%}
+      </div>
+      </div>
+
+      <div>
+        {{form.submit(class ="form__btn")}}
+      </div>
+
+
+    </form>
+  </div>
+</div>
+</div>
+</div>
+{%endblock%}
