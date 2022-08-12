@@ -1,4 +1,4 @@
-from Tool import app
+from Tool import app, db
 import os
 from Tool.forms import RegistrationForm, LoginForm, SearchForm
 from Tool.models import User, Design, Adjective
@@ -15,6 +15,10 @@ stripe.api_key = "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    design=Design(location="nobg.png")
+    db.session.add(design)
+    db.session.commit()
+    print(design)
     return render_template("index.htm")
 
 
@@ -54,9 +58,6 @@ def login():
             error = 'No such login Pls create one'
     return render_template('login.htm', form=form, error=error)
 
-@app.route('/mens', methods=['GET', 'POST'])
-def mens():
-    return render_template('mens.htm')
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
@@ -70,13 +71,13 @@ def account():
     ranges = range(len(design))
     return render_template('account.htm',name=name,design=design,ranges=ranges)
 
-@app.route('/designfind/<adjectives>/<name_>', methods=['GET', 'POST'])
+@app.route('/mens/<adjectives>/<name_>', methods=['GET', 'POST'])
 @login_required
-def find(adjectives,name_):
+def mens(adjectives,name_):
     form=SearchForm()
     if form.validate_on_submit():
         adjectives_=form.adjectives.data
-        return redirect(url_for('find', adjectives=adjectives_,name_=form.name.data))
+        return redirect(url_for('mens', adjectives=adjectives_,name_='Air Jordans'))
     da_list = []
     if adjectives!='None':
         for i in adjectives.split(','):
@@ -86,10 +87,11 @@ def find(adjectives,name_):
                     if j not in current_user.designs:
                         da_list.append(j)
     else:
-        pass
+        design = Design.query.order_by(Design.id.asc())
+        for i in design:
+            da_list.append(i)
     nums = range(len(da_list))
-    print(da_list)
-    return render_template('find.htm',da_list=da_list,form=form,adjectives=adjectives,name_=name_,nums=nums,rame=name_)
+    return render_template('mens.htm',da_list=da_list,form=form,adjectives=adjectives,name_=name_,nums=nums,rame='Air Jordans')
 
 
 @app.route('/add/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
@@ -102,8 +104,8 @@ def add(design_id,adjectives_,where,name_):
     else:
         current_user.design_names+=','+name_
     db.session.commit()
-    if where=='find':
-        return redirect(url_for(where, adjectives=adjectives_,name_=name_))
+    if where=='mens':
+        return redirect(url_for(account, adjectives=adjectives_,name_=name_))
     else:
         return redirect(url_for(where))
 
@@ -117,7 +119,7 @@ def remove(design_id,adjectives_,where,name_):
     dn.remove(name_)
     current_user.design_names = ''.join(dn)
     db.session.commit()
-    if where=='find':
+    if where=='mens':
         return redirect(url_for(where, adjectives=adjectives_))
     else:
         return redirect(url_for(where))
