@@ -53,10 +53,74 @@ def login():
         elif user is None:
             error = 'No such login Pls create one'
     return render_template('login.htm', form=form, error=error)
-    
+
 @app.route('/mens', methods=['GET', 'POST'])
 def mens():
     return render_template('mens.htm')
+
+@app.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    name=[]
+    design=[]
+    for i in current_user.design_names.split(','):
+        name.append(i)
+    for i in current_user.designs:
+        design.append(i)
+    ranges = range(len(design))
+    return render_template('account.htm',name=name,design=design,ranges=ranges)
+
+@app.route('/designfind/<adjectives>/<name_>', methods=['GET', 'POST'])
+@login_required
+def find(adjectives,name_):
+    form=SearchForm()
+    if form.validate_on_submit():
+        adjectives_=form.adjectives.data
+        return redirect(url_for('find', adjectives=adjectives_,name_=form.name.data))
+    da_list = []
+    if adjectives!='None':
+        for i in adjectives.split(','):
+            adjective=Adjective.query.filter_by(name=i.lower()).first()
+            if adjective:
+                for j in adjective.designs:
+                    if j not in current_user.designs:
+                        da_list.append(j)
+    else:
+        pass
+    nums = range(len(da_list))
+    print(da_list)
+    return render_template('find.htm',da_list=da_list,form=form,adjectives=adjectives,name_=name_,nums=nums,rame=name_)
+
+
+@app.route('/add/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
+@login_required
+def add(design_id,adjectives_,where,name_):
+    design = Design.query.filter_by(id=int(design_id)).first()
+    current_user.designs.append(design)
+    if current_user.design_names=='':
+        current_user.design_names+=name_
+    else:
+        current_user.design_names+=','+name_
+    db.session.commit()
+    if where=='find':
+        return redirect(url_for(where, adjectives=adjectives_,name_=name_))
+    else:
+        return redirect(url_for(where))
+
+@app.route('/remove/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
+@login_required
+def remove(design_id,adjectives_,where,name_):
+    design = Design.query.filter_by(id=int(design_id)).first()
+    current_user.designs.remove(design)
+    db.session.commit()
+    dn = current_user.design_names.split(',')
+    dn.remove(name_)
+    current_user.design_names = ''.join(dn)
+    db.session.commit()
+    if where=='find':
+        return redirect(url_for(where, adjectives=adjectives_))
+    else:
+        return redirect(url_for(where))
 
 
 if __name__ == '__main__':
