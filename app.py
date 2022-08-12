@@ -18,5 +18,10 @@ def index():
     return render_template("index.htm")
 
 
+@app.route('/mens', methods=['GET', 'POST'])
+def mens():
+    return render_template('mens.htm')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
