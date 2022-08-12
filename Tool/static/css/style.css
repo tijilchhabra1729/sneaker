@@ -260,7 +260,7 @@ hr {
 /* signup */
 
 .sign-up, .sign-in, .account {
-  width: 35%;
+  width: 55%;
   padding: 2rem;
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(5px);
@@ -321,12 +321,12 @@ hr {
         font-size: 1rem;
         padding: 0rem 2rem;
         border: 2.5px solid rgba(0, 0, 0, .15);
-        background-color: rgba(220, 227, 255, .6);
+        background-color: rgba(187, 255, 222, 0.6);
         transition: all .2s ease-in-out;
       }
     
       .form__search-input:hover, .form__search-input:active, .form__search-input:focus, .form__search-input:valid {
-        background-color: rgba(220, 227, 255, 1);
+        background-color: rgb(220, 255, 234);
       }
     
       .form__search-input::placeholder {
