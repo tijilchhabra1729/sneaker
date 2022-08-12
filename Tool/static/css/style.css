@@ -258,14 +258,15 @@ hr {
 }
 
 /* signup */
+
 .sign-up, .sign-in, .account {
-  width: 65%;
-  padding: 1rem;
+  width: 35%;
+  padding: 2rem;
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(5px);
   border-radius: 10px;
   -webkit-backdrop-filter: blur(5px);
-  margin: 5rem auto 2rem auto;
+  margin: 10rem auto 2rem auto;
   box-shadow: 0 5px 6rem rgba(0, 0, 0, 0.16); }
   @media only screen and (max-width: 56.25em) {
     .sign-up, .sign-in, .account {
@@ -278,9 +279,9 @@ hr {
 
 .sign-up-page, .sign-in-page, .account-page {
   height: 100%;
-  background-image: url("../img/form bg.jpg");
   background-size: 100% 100%;
   background-repeat: no-repeat; }
+
   .mgb-extra-large {
     margin-bottom: 10rem; }
   
@@ -291,7 +292,7 @@ hr {
     margin-bottom: 6rem; }
   
   .mgb-medium {
-    margin-bottom: 5rem; }
+    margin-bottom: 2rem; }
   
   .mgb-small {
     margin-bottom: 1rem; }
@@ -301,7 +302,7 @@ hr {
     .form {
       padding: 1rem 2rem; }
       .form .btn-primary {
-        margin-top: 4rem; }
+        margin-top: 2rem; }
       .form .input-wrapper {
         position: relative; }
       .form__input-small {
@@ -339,16 +340,16 @@ hr {
         outline: none;
         border: none;
         text-decoration: none;
-        font-size: 1rem;
+        font-size: 1.4rem;
         font-family: 'Montserrat', sans-serif;
         font-weight: 500;
         border-radius: 15px;
         padding: 0.5rem 1rem;
         transition: all .3s ease-in-out;
-        color: var(--black);
+        color: #3d3d3d;
         display: inline-block;
         position: relative;
-        background-color: var(--green-cyan);
+        background-color: #dffff2;
       }
       .form__input {
         position: relative;
@@ -361,12 +362,12 @@ hr {
         width: 100%;
         outline: none;
         background-color: transparent;
-        border-bottom: 3px #C5CBF8 solid;
+        border-bottom: 3px #c9c9c9 solid;
       }
     
         .form__line {
           position: absolute;
-          background-color: var(--black);
+          background-color: #dffff2;
           bottom: 0px;
           left: 0;
           width: 100%;
@@ -400,11 +401,11 @@ hr {
         left: 0;
         height: 1.8px;
         width: 100%;
-        background-color: #FF7575;
+        background-color: var(--platinum);
         transform: scaleX(0);
         transition: all .2s ease-in-out; }
       .form .form__input:focus ~ .form__label, .form .form__input:valid ~ .form__label {
-        color: var(--green-cyan);
+        color: var(--platinum);
         transform: translateY(-25px);
         font-size: 1.2rem; }
         @media only screen and (max-width: 56.25em) {
@@ -429,4 +430,5 @@ hr {
       .btn-account:link:hover,
       .btn-account:visited:hover {
         border-bottom: 1px solid #00B4F5; }
+    
       
