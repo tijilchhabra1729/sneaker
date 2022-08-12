@@ -1,4 +1,4 @@
-from Tool import app
+from Tool import app, db
 import os
 from Tool.forms import RegistrationForm, LoginForm, SearchForm
 from Tool.models import User, Design, Adjective
@@ -33,6 +33,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.htm', form=form)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -54,33 +55,36 @@ def login():
             error = 'No such login Pls create one'
     return render_template('login.htm', form=form, error=error)
 
+
 @app.route('/mens', methods=['GET', 'POST'])
 def mens():
     return render_template('mens.htm')
 
+
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    name=[]
-    design=[]
+    name = []
+    design = []
     for i in current_user.design_names.split(','):
         name.append(i)
     for i in current_user.designs:
         design.append(i)
     ranges = range(len(design))
-    return render_template('account.htm',name=name,design=design,ranges=ranges)
+    return render_template('account.htm', name=name, design=design, ranges=ranges)
+
 
 @app.route('/designfind/<adjectives>/<name_>', methods=['GET', 'POST'])
 @login_required
-def find(adjectives,name_):
-    form=SearchForm()
+def find(adjectives, name_):
+    form = SearchForm()
     if form.validate_on_submit():
-        adjectives_=form.adjectives.data
-        return redirect(url_for('find', adjectives=adjectives_,name_=form.name.data))
+        adjectives_ = form.adjectives.data
+        return redirect(url_for('find', adjectives=adjectives_, name_=form.name.data))
     da_list = []
-    if adjectives!='None':
+    if adjectives != 'None':
         for i in adjectives.split(','):
-            adjective=Adjective.query.filter_by(name=i.lower()).first()
+            adjective = Adjective.query.filter_by(name=i.lower()).first()
             if adjective:
                 for j in adjective.designs:
                     if j not in current_user.designs:
@@ -89,27 +93,28 @@ def find(adjectives,name_):
         pass
     nums = range(len(da_list))
     print(da_list)
-    return render_template('find.htm',da_list=da_list,form=form,adjectives=adjectives,name_=name_,nums=nums,rame=name_)
+    return render_template('find.htm', da_list=da_list, form=form, adjectives=adjectives, name_=name_, nums=nums, rame=name_)
 
 
 @app.route('/add/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
 @login_required
-def add(design_id,adjectives_,where,name_):
+def add(design_id, adjectives_, where, name_):
     design = Design.query.filter_by(id=int(design_id)).first()
     current_user.designs.append(design)
-    if current_user.design_names=='':
-        current_user.design_names+=name_
+    if current_user.design_names == '':
+        current_user.design_names += name_
     else:
-        current_user.design_names+=','+name_
+        current_user.design_names += ','+name_
     db.session.commit()
-    if where=='find':
-        return redirect(url_for(where, adjectives=adjectives_,name_=name_))
+    if where == 'find':
+        return redirect(url_for(where, adjectives=adjectives_, name_=name_))
     else:
         return redirect(url_for(where))
 
+
 @app.route('/remove/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
 @login_required
-def remove(design_id,adjectives_,where,name_):
+def remove(design_id, adjectives_, where, name_):
     design = Design.query.filter_by(id=int(design_id)).first()
     current_user.designs.remove(design)
     db.session.commit()
@@ -117,7 +122,7 @@ def remove(design_id,adjectives_,where,name_):
     dn.remove(name_)
     current_user.design_names = ''.join(dn)
     db.session.commit()
-    if where=='find':
+    if where == 'find':
         return redirect(url_for(where, adjectives=adjectives_))
     else:
         return redirect(url_for(where))
