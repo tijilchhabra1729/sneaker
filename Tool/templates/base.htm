@@ -14,6 +14,7 @@
 
 </head>
 <body>
+  {%block content%} 
   <!-- navbar -->
   <div class="topnav" id="myTopnav"> 
     <a href="{{url_for('index')}}" class="active"><img src="../static/img/pb_logo_black.png" style="height: 0.7em;"></a>
@@ -28,5 +29,6 @@
     </a>
   </div>
   <br>
+  {%endblock%}
  </body>
  </html>
