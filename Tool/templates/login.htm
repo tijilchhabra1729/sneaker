@@ -1,0 +1,51 @@
+{%extends 'base.htm'%} {%block content%}
+<div class="sign-in">
+  <br>
+  <div class="row justify-content-center ">
+    <form method="POST" class="form">
+      <h1 class="heading-2">Login</h1>
+      <br>
+      {{form.hidden_tag()}}
+      <div class="mgb-small">
+        <div>
+          <div class="input-wrapper  mgb-e-small">
+              <div>
+                {{form.email(class="form__input", placeholder='Email')}}
+              <div class="form__line"></div>
+            </div>
+        </div>
+  
+        {%if form.email.errors%}
+        {%for error in form.email.errors%}
+  
+        <small class="error">{{error}}</small>
+        {%endfor%} {%endif%}
+      </div>
+      </div>
+
+      <div class="mgb-small">
+        <div>
+          <div class="input-wrapper  mgb-e-small">
+              <div>
+                {{form.password(class="form__input", placeholder='Password')}}
+              <div class="form__line"></div>
+            </div>
+        </div>
+  
+        {%if form.password.errors%}
+        {%for error in form.password.errors%}
+        <small class="error">{{error}}</small>
+        {%endfor%} {%endif%}
+        <small class='text-danger'>{{error}}</small>
+      </div>
+      </div>
+
+      <div>
+        {{form.submit(class ="form__btn")}}<br>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+{%endblock%}
