@@ -15,10 +15,16 @@ stripe.api_key = "sk_test_BQokikJOvBiI2HlWgH4olfQ2"
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    design=Design(location="nobg.png")
-    db.session.add(design)
-    db.session.commit()
-    print(design)
+    # design=Design(location="nobg.png")
+    # db.session.add(design)
+    # db.session.commit()
+    # adj = ['jordan', '11', 'orange', 'laces']
+    # for i in adj:
+    #     adjective=Adjective(name=i)
+    #     db.session.add(adjective)
+    #     db.session.commit()
+    #     design.designs.append(adjective)
+    #     db.session.commit()
     return render_template("index.htm")
 
 
@@ -115,7 +121,7 @@ def add(design_id, adjectives_, where, name_):
         current_user.design_names += ','+name_
     db.session.commit()
     if where=='mens':
-        return redirect(url_for(account, adjectives=adjectives_,name_=name_))
+        return redirect(url_for('account', adjectives=adjectives_,name_=name_))
     else:
         return redirect(url_for(where))
 
@@ -131,7 +137,7 @@ def remove(design_id, adjectives_, where, name_):
     current_user.design_names = ''.join(dn)
     db.session.commit()
     if where=='mens':
-        return redirect(url_for(where, adjectives=adjectives_))
+        return redirect(url_for('account', adjectives=adjectives_))
     else:
         return redirect(url_for(where))
 
@@ -145,6 +151,11 @@ def payment():
 
 @app.route('/thankyou')
 def thankyou():
+    designs = current_user.designs
+    for i in designs:
+        current_user.designs.remove(i)
+    current_user.design_names = []
+    db.session.commit()
     return render_template("thank_you.htm")
 
 

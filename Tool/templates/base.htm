@@ -17,19 +17,14 @@
 
   <!-- navbar -->
   <div class="topnav" id="myTopnav">
-    {%if current_user.is_authenticated%}
     <a href="{{url_for('index')}}" class="active"><img src="../static/img/pb_logo_black.png" style="height: 0.7em;"></a>
-    <a href="{{url_for('mens')}}">Men</a>
+    {%if current_user.is_authenticated%}
+    <a href="{{url_for('mens',adjectives='None',name_='None')}}">Men</a>
     <a href="#">Women</a>
     <a href="#">Kids</a>
     <a href="#">Contact</a>
     <a href="{{url_for('logout')}}">Logout</a>
     {%else%}
-    <a href="{{url_for('index')}}" class="active"><img src="../static/img/pb_logo_black.png" style="height: 0.7em;"></a>
-    <a href="{{url_for('mens')}}">Men</a>
-    <a href="#">Women</a>
-    <a href="#">Kids</a>
-    <a href="#">Contact</a>
     <a href="{{url_for('register')}}">Signup</a>
     <a href="{{url_for('login')}}">Login</a>
     {%endif%}
