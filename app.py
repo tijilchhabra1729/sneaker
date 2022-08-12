@@ -22,6 +22,13 @@ def index():
     return render_template("index.htm")
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("index"))
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
@@ -36,6 +43,7 @@ def register():
 
         return redirect(url_for('login'))
     return render_template('register.htm', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -59,17 +67,19 @@ def login():
     return render_template('login.htm', form=form, error=error)
 
 
+
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    name=[]
-    design=[]
+    name = []
+    design = []
     for i in current_user.design_names.split(','):
         name.append(i)
     for i in current_user.designs:
         design.append(i)
     ranges = range(len(design))
-    return render_template('account.htm',name=name,design=design,ranges=ranges)
+    return render_template('account.htm', name=name, design=design, ranges=ranges)
+
 
 @app.route('/mens/<adjectives>/<name_>', methods=['GET', 'POST'])
 @login_required
@@ -79,9 +89,9 @@ def mens(adjectives,name_):
         adjectives_=form.adjectives.data
         return redirect(url_for('mens', adjectives=adjectives_,name_='Air Jordans'))
     da_list = []
-    if adjectives!='None':
+    if adjectives != 'None':
         for i in adjectives.split(','):
-            adjective=Adjective.query.filter_by(name=i.lower()).first()
+            adjective = Adjective.query.filter_by(name=i.lower()).first()
             if adjective:
                 for j in adjective.designs:
                     if j not in current_user.designs:
@@ -96,22 +106,23 @@ def mens(adjectives,name_):
 
 @app.route('/add/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
 @login_required
-def add(design_id,adjectives_,where,name_):
+def add(design_id, adjectives_, where, name_):
     design = Design.query.filter_by(id=int(design_id)).first()
     current_user.designs.append(design)
-    if current_user.design_names=='':
-        current_user.design_names+=name_
+    if current_user.design_names == '':
+        current_user.design_names += name_
     else:
-        current_user.design_names+=','+name_
+        current_user.design_names += ','+name_
     db.session.commit()
     if where=='mens':
         return redirect(url_for(account, adjectives=adjectives_,name_=name_))
     else:
         return redirect(url_for(where))
 
+
 @app.route('/remove/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
 @login_required
-def remove(design_id,adjectives_,where,name_):
+def remove(design_id, adjectives_, where, name_):
     design = Design.query.filter_by(id=int(design_id)).first()
     current_user.designs.remove(design)
     db.session.commit()
@@ -123,6 +134,36 @@ def remove(design_id,adjectives_,where,name_):
         return redirect(url_for(where, adjectives=adjectives_))
     else:
         return redirect(url_for(where))
+
+
+######## payments #########
+
+@app.route('/payment')
+def payment():
+    return render_template('account.htm', public_key=public_key)
+
+
+@app.route('/thankyou')
+def thankyou():
+    return render_template("thank_you.htm")
+
+
+@app.route('/payment/hqhfoufhofhqoufhqoufh', methods=['POST'])
+def payment_form():
+
+    # CUSTOMER INFORMATION
+    customer = stripe.Customer.create(email=request.form['stripeEmail'],
+                                      source=request.form['stripeToken'])
+
+    # CHARGE/PAYMENT INFORMATION
+    charge = stripe.Charge.create(
+        amount=499,
+        customer=customer.id,
+        currency='usd',
+        description='Premium'
+    )
+
+    return redirect(url_for('thankyou'))
 
 
 if __name__ == '__main__':
