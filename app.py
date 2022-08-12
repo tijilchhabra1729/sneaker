@@ -1,7 +1,7 @@
 from Tool import app, db
 import os
 from Tool.forms import RegistrationForm, LoginForm, SearchForm
-from Tool.models import User, Design, Adjective
+from Tool.models import User, Design, Adjective,design
 from flask import render_template, request, url_for, redirect, flash, abort
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import desc, asc
@@ -18,7 +18,7 @@ def index():
     # design=Design(location="nobg.png")
     # db.session.add(design)
     # db.session.commit()
-    # adj = ['jordan', '11', 'orange', 'laces']
+    # adj = ['Jordans', '12', 'red', 'laces']
     # for i in adj:
     #     adjective=Adjective(name=i)
     #     db.session.add(adjective)
@@ -79,10 +79,10 @@ def login():
 def account():
     name = []
     design = []
-    for i in current_user.design_names.split(','):
-        name.append(i)
     for i in current_user.designs:
         design.append(i)
+        name.append(i.designs[0].name)
+        print('hi')
     ranges = range(len(design))
     return render_template('account.htm', name=name, design=design, ranges=ranges)
 
@@ -95,6 +95,7 @@ def mens(adjectives,name_):
         adjectives_=form.adjectives.data
         return redirect(url_for('mens', adjectives=adjectives_,name_='Air Jordans'))
     da_list = []
+    lol= []
     if adjectives != 'None':
         for i in adjectives.split(','):
             adjective = Adjective.query.filter_by(name=i.lower()).first()
@@ -102,12 +103,44 @@ def mens(adjectives,name_):
                 for j in adjective.designs:
                     if j not in current_user.designs:
                         da_list.append(j)
+                        lol.append(j.designs[0])
     else:
         design = Design.query.order_by(Design.id.asc())
         for i in design:
+            if i in current_user.designs:
+                continue
             da_list.append(i)
+            lol.append(i.designs[0])
     nums = range(len(da_list))
-    return render_template('mens.htm',da_list=da_list,form=form,adjectives=adjectives,name_=name_,nums=nums,rame='Air Jordans')
+    return render_template('mens.htm',da_list=da_list,form=form,adjectives=adjectives,name_=name_,nums=nums,rame='Air Jordans',lol=lol)
+
+@app.route('/womens/<adjectives>/<name_>', methods=['GET', 'POST'])
+@login_required
+def womens(adjectives,name_):
+    form=SearchForm()
+    if form.validate_on_submit():
+        adjectives_=form.adjectives.data
+        return redirect(url_for('mens', adjectives=adjectives_,name_='Air Jordans'))
+    da_list = []
+    lol=[]
+    if adjectives != 'None':
+        print('yo')
+        for i in adjectives.split(','):
+            adjective = Adjective.query.filter_by(name=i.lower()).first()
+            if adjective:
+                for j in adjective.designs:
+                    if j not in current_user.designs:
+                        da_list.append(j)
+                        lol.append(j.designs[0])
+    else:
+        design = Design.query.order_by(Design.id.asc())
+        for i in design:
+            print(i)
+            if i not in current_user.designs:
+                da_list.append(i)
+                lol.append(i.designs[0])
+    nums = range(len(da_list))
+    return render_template('mens.htm',lol=lol,da_list=da_list,form=form,adjectives=adjectives,name_=name_,nums=nums,rame='Air Jordans')
 
 
 @app.route('/add/<design_id>/<adjectives_>/<where>/<name_>', methods=['GET', 'POST'])
@@ -132,10 +165,11 @@ def remove(design_id, adjectives_, where, name_):
     design = Design.query.filter_by(id=int(design_id)).first()
     current_user.designs.remove(design)
     db.session.commit()
-    dn = current_user.design_names.split(',')
-    dn.remove(name_)
-    current_user.design_names = ''.join(dn)
-    db.session.commit()
+    # dn= ''
+    # dn = current_user.design_names.split(',')
+    # dn.remove(name_)
+    # current_user.design_names = ''.join(dn)
+    # db.session.commit()
     if where=='mens':
         return redirect(url_for('account', adjectives=adjectives_))
     else:

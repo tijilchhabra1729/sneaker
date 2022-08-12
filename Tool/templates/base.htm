@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Pace</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,9 +20,8 @@
     <a href="{{url_for('index')}}" class="active"><img src="https://i.ibb.co/zrRs53y/pb-logo-black.png" style="height: 0.7em;"></a>
     {%if current_user.is_authenticated%}
     <a href="{{url_for('mens',adjectives='None',name_='None')}}">Men</a>
-    <a href="#">Women</a>
-    <a href="#">Kids</a>
-    <a href="#">Contact</a>
+    <a href="{{url_for('womens',adjectives='None',name_='None')}}">Women</a>
+    <a href="{{url_for('account')}}">Cart</a>
     <a href="{{url_for('logout')}}">Logout</a>
     {%else%}
     <a href="{{url_for('register')}}">Signup</a>

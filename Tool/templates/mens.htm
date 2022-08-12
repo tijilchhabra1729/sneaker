@@ -72,7 +72,7 @@
         <div class=" grid-container" style="width: 50%;">
           {%for i in nums%}
             <div class="grid-item">
-              <p class="grid-text-secondary">{{rame}}</p><br><br>
+              <h3>{{lol[i].name}} <br><br> </h3>
               <img src="{{url_for('static',filename=da_list[i].location)}}" class="grid-img">
               <div style="margin: 10%;">
                 <a href="{{url_for('add', design_id=da_list[i].id,adjectives_=adjectives,where='mens',name_=name_)}}"><img src="https://img.icons8.com/material-outlined/96/737373/shopping-cart--v1.png" class="small-btn-l"></a>

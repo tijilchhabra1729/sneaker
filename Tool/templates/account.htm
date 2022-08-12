@@ -1,25 +1,27 @@
 {%extends "base.htm"%} {%block content%}
-<br><br><br><br><br>
 
 <section class="designs">
   <div class="header">
-    <h1 class="heading-2">All your designs</h1>
+    <h1 class="heading-2">Cart</h1>
   </div>
 
-  <div class="designs-container">
+  <div class="grid-container" style="width: 50%;">
 
     {%if current_user.designs%}
     {%for i in ranges%}
-    <div class="design">
-      <p class="design__heading">{{name[i]}}</p>
-      <img src="{{url_for('static',filename=design[i].location)}}" alt="" class="design__img">
-      <p class="design__text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa nisi repellendus perferendis consectetur minima et, obcaecati similique modi eligendi</p>
+    <div class="grid-item">
+      <h3>{{name[i]}}</h3>
+      <img src="{{url_for('static',filename=design[i].location)}}" alt="" class="grid-img">
+      <div style="margin: 10%;">
       <a href="{{url_for('remove', design_id=design[i].id,adjectives_='person',where='account',name_=name[i])}}" class="btn-primary btn-secondary__link">Delete</a>
+    </div>
     </div>
     {%endfor%}
   </div>
   {%else%}
+   <p>Empty</p>
   {%endif %}
+
   <form action="{{url_for('payment_form')}}" method="POST">
     <h1 class="text-5xl font-extrabold text-medium py-2 mb-8 text-gray-500">Check Out by clicking the button</h1>
     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button " data-key={{public_key}} data-amount=499
