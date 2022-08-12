@@ -146,8 +146,6 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 15%;
-  margin-right: 15%;
   display: grid;
   column-gap: 25px;
   row-gap: 25px;
@@ -165,12 +163,12 @@ img {
 }
 
 .grid-text-primary {
-  font-size: 1.6em;
-  margin: 10px 0;
+  font-size: 0.8em;
+  float: left;
 }
 
 .grid-text-secondary {
-  font-size: 1em;
+  font-size: 0.8em;
   font-weight: 300;
   text-transform: lowercase;
 }
@@ -212,7 +210,6 @@ img {
 /* columns */
   .column {
     float: left;
-    width: 50%;
     padding: 10px;
   }
   .row:after {
