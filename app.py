@@ -135,5 +135,35 @@ def remove(design_id, adjectives_, where, name_):
         return redirect(url_for(where))
 
 
+######## payments #########
+
+@app.route('/payment')
+def payment():
+    return render_template('account.htm', public_key=public_key)
+
+
+@app.route('/thankyou')
+def thankyou():
+    return render_template("thank_you.htm")
+
+
+@app.route('/payment/hqhfoufhofhqoufhqoufh', methods=['POST'])
+def payment_form():
+
+    # CUSTOMER INFORMATION
+    customer = stripe.Customer.create(email=request.form['stripeEmail'],
+                                      source=request.form['stripeToken'])
+
+    # CHARGE/PAYMENT INFORMATION
+    charge = stripe.Charge.create(
+        amount=499,
+        customer=customer.id,
+        currency='usd',
+        description='Premium'
+    )
+
+    return redirect(url_for('thankyou'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
