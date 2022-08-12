@@ -229,3 +229,30 @@ img {
       width: 100%;
     }
   }
+
+/* list */
+h3{
+  margin: 0;
+  font-size: 1em;
+}
+ul {
+  list-style: none;
+  margin-top: 2%;
+  margin-bottom: 5%;
+  padding: 0;
+}
+.valid{
+  text-decoration: none;
+  color: inherit;
+}
+.invalid {
+  color: #999999;
+}
+hr {
+ height: 2px; 
+ border-width: 0; 
+ background-color: #999999; 
+ width: 45%; 
+ text-align: left; 
+ margin-left: 0;
+}
