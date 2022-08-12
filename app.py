@@ -33,7 +33,27 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.htm', form=form)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    error = ''
+    if form.validate_on_submit():
 
+        user = User.query.filter_by(email=form.email.data).first()
+
+        if user is not None and user.check_password(form.password.data):
+            login_user(user)
+
+            next = request.args.get('next')
+            if next == None or not next[0] == '/':
+                next = url_for('index')
+            return redirect(next)
+        elif user is not None and user.check_password(form.password.data) == False:
+            error = 'Wrong Password'
+        elif user is None:
+            error = 'No such login Pls create one'
+    return render_template('login.htm', form=form, error=error)
+    
 @app.route('/mens', methods=['GET', 'POST'])
 def mens():
     return render_template('mens.htm')
